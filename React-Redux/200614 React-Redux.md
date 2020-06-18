@@ -1,4 +1,4 @@
-# 20200614 React-Redux
+# 20200614 React-Redux
 
 ![my-img](img/200614-1.png)
 
