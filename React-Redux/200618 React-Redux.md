@@ -59,3 +59,50 @@ The connect function take the currently selected song and pass it as a prop down
 Now the SongDetail component has absolutely no functionality (allow user to click on something... which would cause a change to a redux state) tied to it, so we do not need to wire up any action creator to SongDetail component.
 
 (You do not need to make a class based component to work with the connect function, you can work with the connect function with a functional component as well.)
+
+```js
+const mapStateToProps = state => {
+  return { song: state.selectedSong };
+};
+
+export default connect(mapStateToProps)(SongDetail);
+```
+
+This function is going to be called with our entire state object, so we're going to reach into that state object and pull out the property that we care about, and return it as an object from this function.
+
+```js
+// in reducers index.js file
+export default combineReducers({
+  songs: songsReducer,
+  selectedSong: selectedSongReducer
+});
+```
+
+The keys on this object are going to be the keys inside of our state object. So our selectedSong is going to be available on state.selectedSong.
+
+```js
+const SongDetail = props => {
+  console.log(props);
+  return <div>Song Detail</div>;
+};
+```
+
+Inside of SongDetail component, it should be getting a prop's object that contains the currently selected song ({ song: state.selectedSong }).
+
+---
+
+<font color = "gray">So this is another good example of where our app component is no longer going to be really in charge of customizing any of the child component that it renders. That's absolutely what happened in the past before we had the app component in charge of everything and it passed a lot of config into our different components. But now we are relying upon redux to provide all the configuration that we really care about and all that changing data and the ability to change data is being passed directly into the components themselves.</font>
+
+---
+
+![my-img](img/200618-3.png)
+
+So this is the props object inside of our SongDetail component (We see that it gets the dispatch function directly). We usually do not make use of that dispatch function directly, instead we wire up our action creators to the connect function
+
+When our application first starts up, we do not yet have a selected song, so we see a value of null.
+
+If I clicked on the select button, we called an action creator which updated a reducer that updated our state inside of a redux store.
+
+Anytime we update the data inside our redux store by dispatching an action or essentially calling an action creator, it causes all of our components that are hooked up to the connect function to automatically re-render.
+
+And so this second called of console.log right here is from our SongDetail component automatically being re-rendered, and inside there we can see that we have a song property with the song that I had selected.
