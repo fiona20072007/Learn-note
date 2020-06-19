@@ -91,7 +91,7 @@ Inside of SongDetail component, it should be getting a prop's object that contai
 
 ---
 
-<font color = "gray">So this is another good example of where our app component is no longer going to be really in charge of customizing any of the child component that it renders. That's absolutely what happened in the past before we had the app component in charge of everything and it passed a lot of config into our different components. But now we are relying upon redux to provide all the configuration that we really care about and all that changing data and the ability to change data is being passed directly into the components themselves.</font>
+So this is another good example of where our app component is no longer going to be really in charge of customizing any of the child component that it renders. That's absolutely what happened in the past before we had the app component in charge of everything and it passed a lot of config into our different components. But now we are relying upon redux to provide all the configuration that we really care about and all that changing data and the ability to change data is being passed directly into the components themselves.
 
 ---
 
