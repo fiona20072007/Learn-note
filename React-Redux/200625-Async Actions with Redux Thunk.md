@@ -77,3 +77,18 @@ With redux thunk we can manually dispatch an action at some point in time in the
 Now when we dispatch an action, so we get this new action created right here, this can be a plain javascript object or a function. But when we're dispatching it manually from redux thunk or inside of that function, it's basically always going to be a plain object. So we're going to dispatch this action, it's going to flow back into dispatch, dispatch is going to send it right back into redux thunk redux thunk is going to say OK are you a function or an object. In this case it's going to be an object. So we're going to have redux thunk automatically for that thing onto all of our different reducers.
 
 So the real takeaway here is that with redux thunk we can return a function, if we do, that function will be invoked with the dispatch and get state arguments, and with those two functions, we have unlimited power over our redux store. We can change any data, and we can read any data, and so at any point in time in the future for example after our request completes, we can then manually dispatch an action and update the data inside of our store.
+
+![my-img](img/200625-3.png)
+
+You'll notice on line 2, Essentially what is happening there is we have a series of functions that return functions very similar to how you and I are defining a function(first line) that returns a function(second line).
+
+```js
+export const fetchPosts = () => {
+  return function(dispatch, getState) {
+```
+
+But if you look in the body of that thing you'll see the actual logic of what's going on.
+
+Redux thunk is saying: Did you just dispatch an action. If you did, is it a function. If it is a function, then redux thunk is going to invoke that action with dispatch and get state and an optional extra argument.
+
+If our action was not a function, then redux thunk essentially says: oh I don't care about this action, it's an object, so I'm going to send it on to either the next middleware or all that different reducers if there are no other middleware to run.
