@@ -66,8 +66,24 @@ why are we using the async await syntax again here: with redux thunk we can use 
 
 ![my-img](img/200627-2.png)
 
-But once we have redux thunk, the async await syntax right here is only going to modify the return values of this inner function(如上圖), and we don't care about what we return from this function. Nothing from this function return or invocation ever gets used. You just looked at the source code of redux thunk and you saw that redux thunk did not somehow get a reference to whatever gets returned from right and make use of it for some nefarious purpose, so we can return or not return anything we want from the inner function.
+But once we have redux thunk, the async await syntax right here is only going to modify the return values of this inner function(如上圖), and we don't care about what we return from this function. Nothing from this function return or invocation ever gets used. You just looked at the source code of redux thunk and you saw that redux thunk did not somehow get a reference to whatever gets returned from and make use of it for some nefarious purpose, so we can return or not return anything we want from the inner function.
 
 ![my-img](img/200627-3.png)
 
-It is only what we return from our outer function the actual creator itself that we are concerned about.
+It is only what we return from our outer function (the action creator itself) that we are concerned about.
+
+---
+
+```js
+export const fetchPosts = () => async dispatch => {
+  const response = await jsonPlaceholder.get("/posts");
+  dispatch({
+    type: "FETCH_POSTS",
+    payload: response
+  });
+};
+```
+
+you'll notice that we're not using this getState argument or function anywhere inside the function, so we don't have to always list out getState.
+
+all this is doing is we're defining a function that is going to return a function.
