@@ -22,4 +22,6 @@ every single time that your reducer gets called, it should always have a return 
 
 It's when I failed to place a return statement or I specifically return a value of undefined that we're going to run into that error message.
 
-when redux first boots up, it's going to run each of your reducers one time
+when redux first boots up, it's going to run each of your reducers one time (essentially when redux first boots up it's going to call your reducers one time).
+
+The rule around not returning undefined is not only about initialization, your reducer can never ever return undefined whether it is an initialization or at some point in time in the future when an action has been dispatched.
