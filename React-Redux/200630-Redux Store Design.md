@@ -71,7 +71,3 @@ The only thing that we're ever going to return is going to be some computation d
 Now this entire idea right here is what we refer to as keeping a reducer pure.
 
 So with a pure function or a pure reducer we are only ever going to return values that use it's input arguments.
-
----
-
-Rule 4:
