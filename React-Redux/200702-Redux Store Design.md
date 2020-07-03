@@ -42,6 +42,9 @@ So all these additions into this object are going to be evaluated from left to r
 ```js
 const profile = { name: "Sam" };
 _.omit(profile, "name"); //{}
+console.log(profile); //{name: "Sam"}
 ```
 
-A much easier way to remove property from object would be to use the load ash library. So the underscore right there is a reference to the load ash library. load ash is a very popular javascript library for working with objects and arrays
+A much easier way to remove property from object would be to use the lodash library. So the underscore right there is a reference to the lodash library. lodash is a very popular javascript library for working with objects and arrays.
+
+omit is not going to mutate that object, it's going to create a new object without the name property.
