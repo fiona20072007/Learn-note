@@ -70,3 +70,27 @@ We're going to rewrite that using ES2015 syntax with a template string instead.
 After we make that request and get back a response I'll then dispatch an action with type (No s here because we are fetching one user at a time) and payload.
 
 in fetch posts when we fetch a list of posts the response that we got was an array of records (objects), but when we fetch one user at a time we don't get an array, we get just an object that has details about that given user.
+
+into the user header component, we want to make sure that we call an action creator inside of here that's going to fetch the appropriate user. So at the top we're going to import the connect function and the action creator itself, and we will use the connect tag to wire up the action creator to the component.
+
+```js
+export default connect(
+  null,
+  { fetchUser }
+)(UserHeader);
+```
+
+Down at the bottom I'll place the connect function and make sure I wrap my component with a second set parentheses. Right now we did not have a mapStateToProps function, so I'm going to pass a null as the first argument, and then for the second argument I'll do an object with fetchUser.
+
+```js
+class UserHeader extends React.Component {
+  componentDidMount() {
+    this.props.fetchUser(this.props.userId);
+  }
+  render() {
+    return <div>User Header</div>;
+  }
+}
+```
+
+Inside of our component, whenever this component appears on the screen, we're probably going to want to make sure that we attempt to fetch the given user that this thing is supposed to show. So I'm going to define that componentDidMount inside of here, whenever user header is displayed, I'm going to call my action creator through this.props.fecthUser(), and then we need to pass in the ID of the user that we want to fetch.
