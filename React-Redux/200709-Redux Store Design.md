@@ -67,6 +67,10 @@ The UserHeader component is not really well-suited to take the entire array of u
 
 And so to make this component by itself a little bit more reusable, it would be a lot better if we could figure out some way to pass it just the user that it cares about. To do so, there's a couple of different approaches we could take.
 
+---
+
+one approach
+
 ```js
 class PostList extends React.Component {
   componentDidMount() {
@@ -92,3 +96,45 @@ class PostList extends React.Component {
 ```
 
 We could either get our entire list of users inside of PostList, and then every single time that we render the UserHeader, we could go through that find logic and attempt to just pass in the user that we care about as opposed to this userId={post.userId}.
+
+---
+
+another approach
+
+inside of UserHeader component, I'm going to go down to the mapStateToProps function. The reason that we defined mapStateToProps right here is so that we can do kind of like these pre calculations on values that are coming into our component as props and our redux state.
+
+So rather than passing in like a ton of data to our component and relying upon the component to figure out how to find the user that we care about, we could instead extract all that logic to the mapStateToProps function. So rather than going through this find operation inside the components itself, write that logic out inside of mapStateToProps.
+
+In some applications like some professional applications some engineers decide to define this mapStateToProps function and this connect stuff inside of a separate file.
+
+So you might have one file that has mapStateToProps and the initial connect set up right here, and then in a different file you will define the component by itself. The advantage to that is that you will have a component that can be used on its own without having to reach into the redux store.
+
+But then if you want to you can also very easily create a version of that component that will reach into the redux store and get all of its own data. In addition if you ever have another component that needs to get access to just one particular user given only a user ID we could easily write mapStateToProps and this connect stuff into a separate file and then reuse it in multiple components inside of our application.
+
+```js
+const mapStateToProps = (state, ownProps) => {
+  return { user: state.users.find(user => user.id === ownProps.userId) };
+};
+```
+
+mapStateToProps does not only get called with our state object out of our redux store as an argument, it actually gets a second argument as well, that is referred to as ownProps. This ownProps object is a reference to the props that are about to be sent into this component.
+
+So if we ever want to do pre calculation steps, so that we don't have to pass in a ton of data directly to the components, we can reference the props that are about to go into the components on this ownProps object, and then we still get our redux state on the first argument.
+
+```js
+render() {
+    const { user } = this.props;
+    if (!user) {
+      return null;
+    }
+    return <div className="header">{user.name}</div>;
+}
+```
+
+inside my render method we no longer have access to the this.props.users value, instead it's simply this.props.user because now we are only passing in the one user to our components.
+
+I'm going to destructure off just that user from my props object. And so now we can check to see if that user exists.
+
+---
+
+the entire idea here is that we can extract anything that is going to do some computation on our state our redux States and the prop's coming into our component to the mapStateToProps function. And that's really what mapStateToProps is for.
