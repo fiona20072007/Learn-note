@@ -128,8 +128,65 @@ So every time we call the action creator, new memoized version comes out and we 
 
 We need to define a function outside of our action creator, that's going to actually make the request and then dispatch our action, and we're going to memoize it outside of the action creator. So that it only gets memoized exactly one time, and it's not going to be rememoized everytime that we call our action creator fetchUser.
 
+```js
+export const fetchUser = id => async dispatch => {
+
+};
+const _fetchUser = _.memoize(() => {
+  const response = await jsonPlaceholder.get(`/users/${id}`);
+
+  dispatch({ type: "FETCH_USER", payload: response.data });
+});
+```
+
 So I'm going to declear a new variable called \_fetchUser. I'm putting in the underscore right here to indicate that this is a private function so to speak and that other engineers should not attempt to call this function unless they really know what they are doing.
 
-And then we're going to set up an arrow function, and this arrow function is going to be what actually makes a request and then dispatches an action.
+And then we're going to set up an arrow function, and this arrow function is going to be what actually makes our request and then dispatches an action.
 
 And then I'm going to make sure that I memoize this thing by wrapping it with a memoize call.
+
+```js
+export const fetchUser = id => async dispatch => {
+  _fetchUser(id, dispatch);
+};
+const _fetchUser = _.memoize((id, dispatch) => {
+  const response = await jsonPlaceholder.get(`/users/${id}`);
+
+  dispatch({ type: "FETCH_USER", payload: response.data });
+});
+```
+
+Now we can make sure that we call the memoized version of fetchUser inside of our action creator.
+
+Our \_fetchUser function needs to get the id that we want to fetch, and it also needs a reference to the dispatch function. So we need to somehow get these arguments(id, dispatch) into \_fetchUser. so we should have to do here is make sure that we call id and we'll pass in dispatch as well. So now our memoized function will receive the id and dispatch as arguments.
+
+```js
+export const fetchUser = id => async dispatch => {
+  _fetchUser(id, dispatch);
+};
+```
+
+```js
+export const fetchUser = id => dispatch => {
+  _fetchUser(id, dispatch);
+};
+const _fetchUser = _.memoize(async (id, dispatch) => {
+  const response = await jsonPlaceholder.get(`/users/${id}`);
+
+  dispatch({ type: "FETCH_USER", payload: response.data });
+});
+```
+
+We no longer have the await keyword on this inner function right here, so we can remove the async and we actually need to move that async to the arrow function.
+
+now will see that we only attempt to fetch each user exactly on time because we have now correctly memoized \_fetchUser function. So this thing can only be called exactly one time, and we only memoize it one time as well as opposed to redeclare the function and memoizing it everytime that we call our action creator.
+
+```js
+export const fetchUser = id => dispatch => _fetchUser(id, dispatch);
+```
+
+if we wanted to we could do this refactor. So now we've got a function that returns a function that calls \_fetchUser with the id and dispatch.
+
+the one side effect to this solution that I want to mention is that if you ever want to refetch a user for some reason, like if you have made a change to a user or if you know that the user data has been updated on your API and you want to refetch it, unfortunately you would not be able to do it again using this action creator. With this solution, you can only fetch each user exactly one time inside of your application.
+
+So if you wanted to be able to refetch your user, you would have to essentially like declare a another action creator that has the same logic but just does not apply that memoization step.
