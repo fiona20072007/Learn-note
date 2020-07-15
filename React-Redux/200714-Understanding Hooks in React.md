@@ -208,6 +208,52 @@ const [activeIndex, setActiveIndex] = useState(null);
 
 Next up at the top of my component, I'm going to initialize a new piece of state.
 
+The goal of useState is specifically to give us access to the state system inside of a functional component.
+
+Syntax that we saw on the left hand side is referred to as a Ray D structuring, the idea behind a Ray D structuring is identical to Object D structuring. It is just a shortcut to get access to some elements inside of an array.
+
+```js
+const colors = ["red", "green"];
+const redColor = colors[0];
+const greenColor = colors[1];
+
+const [firstElement, secondElement] = colors;
+//console.log(firstElement)  red
+//console.log(secondElement)  green
+```
+
+If I wanted to assign these to two separate variables, I would end up with three lines of code in total. So instead, we would make use of a Ray D structuring.
+
+The square brackets that you see on the left hand side are not creating an array. Instead, this is some syntax to tell JavaScript that we want to get access to the first element inside of the colors array, and assign it to a new variable called firstElement. We then want to get access to the second element inside that array and assign it to a variable called secondElement.
+
+So it's just a shortcut to get references to elements inside of an array.
+
+![my-img](img/200714-5.png)
+
+Whenever we call useState, we get back an array with exactly two elements inside of it.
+
+This first argument coming back from calling useState is the piece of state that we are trying to keep track of. So this is a reference to some value that is going to change over time.
+
+The second element inside the array setActiveIndex is a function that we call to update our piece of state. Anytime that we call this setter function right here to update our piece of state, just like inside of a Class-Based component, it will cause our entire component to automatically re-render.
+
+Finally, whenever we call useState, it takes in one argument, and that is going to be the default value for our piece of state.
+
+So we call useState. We put in our initial value. That initial value is immediately assigned to activeIndex. And then we can update that value using setActiveIndex. We can change these names to be anything we want.
+
+So if we have some other piece of state inside of a function component that we want to keep track of.
+
+```js
+const [name, setName] = useState("");
+const [counter, setCounter] = useState(0);
+const [color, setColor] = useState("green");
+```
+
+The piece of state, the setter and the initial value have direct parallels to the class based component implementation of state.
+
+![my-img](img/200714-6.png)
+
+![my-img](img/200714-7.png)
+
 ```js
 const onTitleClick = index => {
   setActiveIndex(index);
