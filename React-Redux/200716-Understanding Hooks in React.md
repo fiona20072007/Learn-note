@@ -103,4 +103,43 @@ useEffect(() => {
 
 Method number two is going to very similar, we can remove that temporary variable altogether. And to invoke the function, we could wrap this with a set of parentheses, and then after the closing parentheses, we'll put in another set of parentheses. This defines a function, and then immediately invokes it.
 
-The third possible approach is to just revert back to using normal promises. Whenever you make a request to axios, it gives us back a promise, we could chain on a .then statement.
+```js
+useEffect(() => {
+  axios.get("URL").then(response => {
+    console.log(response.data);
+  });
+}, [term]);
+```
+
+The third possible approach is to just revert back to using normal promises. Whenever you make a request through axios, it gives us back a promise, we could chain on a .then statement. And this arrow function inside of .then will be invoked with the response that we get back from that API.
+
+So those are the three possible alternatives. Either declare the helper function, declare a helper function and immediately invoke it, or just make use of promises.
+
+the three ways that we can make a request inside of useEffect while still using some async await syntax or a promise.
+
+---
+
+![my-img](img/200716-5.png)
+
+The vast majority of this is actually a query string. So we do not encode the query string into the actual URL argument of our request. Instead, we're just going to put in the domain and the path and then we will provide a separate object to encode all these query parameters.
+
+```js
+useEffect(() => {
+  const search = async () => {
+    await axios.get("https://en.wikipedia.org/w/api.php", {
+      params: {
+        action: "query",
+        list: "search",
+        origin: "*",
+        format: "json",
+        srsearch: term
+      }
+    });
+  };
+  search();
+});
+```
+
+Then as the second argument, we're gonna put in an options object. We're going to provide a params property and assign it an object. Remember whatever key value pairs we put inside of this object, Axios will take all those and code them into a query string and depended on to the end of the URL automatically. srsearch is going to be our actual search term.
+
+An initial request has already been issued. The reason for that is that when we first render our component to the screen, our useEffect function is going to be invoked.
