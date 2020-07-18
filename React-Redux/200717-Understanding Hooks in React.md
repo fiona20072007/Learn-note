@@ -175,8 +175,14 @@ The next problem that we're going to solve is making sure that we do not do an A
 
 The user keeps on changing that text input. And every single time they initiate a change to it, we are immediately doing a search.
 
-![my-img](img/200717-8.png)
+![my-img](img/200717-7.png)
 
 We want to allow a user to type inside that input as much as they please. whenever they type inside there, we are not going to immediately do any kind of search. Instead, we're going to somehow wait for about five hundred milliseconds for the user to not do any additional input changes.
 
 So in other words, if they type a whole bunch and then stop for about five hundred milliseconds, then we will go ahead and do the actual search.
+
+![my-img](img/200717-8.png)
+
+Whenever a user first types inside that input, we are going to set up a timer using the set timeout function that is built into JavaScript. In that set timeout function, we are going to say in 500 ms, go and run the search function with whatever the current term is. That's going to occur at the very first key press.
+
+If the user then immediately presses another character, we are then going to cancel the previous timer. We just line up that operation to do a search in five hundred milliseconds, but the user just pressed a character again. So let's go back and cancel that last search timer and set up a new timer to do a search in 500ms. And as you can see, that entire process is going repeat over and over again until the user goes for 500 milliseconds without typing anything in. And at that point in time, we will execute the last set timeout that was created.
