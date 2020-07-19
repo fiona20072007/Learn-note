@@ -121,4 +121,53 @@ But we have a new warning right here around react hook use effect has a missing 
 
 Anytime that you refer to a prop or a piece of state inside of useEffect, react or specifically a rule built in to create react app or something called ESLint is going to want you to reference any different prop or piece of state inside of the useEffect dependency array([term]), it is the array that controls when useEffect gets executed.
 
-So if you ever make reference to a piece of state or props, that rule wants you to see it listed inside
+So if you ever make reference to a piece of state or props, that rule wants you to see it listed inside of this array, and that array is all about deciding when to rerun our useEffect function.
+
+```js
+useEffect(() => {
+  const search = async () => {
+    const { data } = await axios.get("https://en.wikipedia.org/w/api.php", {
+      params: {
+        action: "query",
+        list: "search",
+        origin: "*",
+        format: "json",
+        srsearch: term
+      }
+    });
+    setResults(data.query.search);
+  };
+
+  if (term && !results.length) {
+    search();
+  } else {
+    const timeoutId = setTimeout(() => {
+      if (term) {
+        search();
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }
+}, [term, results.length]);
+```
+
+Now the warning get away, but there is another issue. When I refresh the page, we immediately see one request issued over to the Wikipedia API, however, you'll notice that now there is a second request being issued as well after 500ms. If we take out that results.length.
+
+Why does adding in results.length result in the second request?
+
+![my-img](img/200719-3.png)
+
+So right now, we've got our initial component render when we first render our component to the screen, we've got these two pieces of state and we are referencing these things inside of that dependancy array(the second argument to useEffect).
+
+Then we immediately run that useEffect function or really the function that we provide to use effect. Inside of there, we've got a term of programming, we have no results, so we do a search right away, we make that request and then after a very brief period of time, we get the response back and we update our results piece of state.
+
+when we update that piece of state, that causes a re-render of our whole component, when we do that, we render we build up our list re-display that component on the screen. However, immediately after updating that component, we now have some new state. Now results.length has a value of ten.
+
+This array(the second argument to useEffect) controls when the overall of this first argument function we provide gets executed. Whatever elements we put in this array are going to cause that function to be executed again whenever at least one of these elements change.
+
+So after we fetch our data and results.length is now updated to 10, react see result.length changed, that is one of the elements inside this array. A element in that array has changed, that means we have to rerun that useEffect function. So react is going to automatically rerun this function(the first argument to useEffect) again.
+
+Now this time, we have a term and we have some results. So we're going to go into this else case. We're going to set up a time out. And then after one second goes by without us typing anything in, we do another search. And that is why we see that second request appear in our network request log. That's why we are seeing two requests.
