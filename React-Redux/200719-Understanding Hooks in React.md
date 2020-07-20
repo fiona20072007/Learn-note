@@ -171,3 +171,71 @@ This array(the second argument to useEffect) controls when the overall of this f
 So after we fetch our data and results.length is now updated to 10, react see result.length changed, that is one of the elements inside this array. A element in that array has changed, that means we have to rerun that useEffect function. So react is going to automatically rerun this function(the first argument to useEffect) again.
 
 Now this time, we have a term and we have some results. So we're going to go into this else case. We're going to set up a time out. And then after one second goes by without us typing anything in, we do another search. And that is why we see that second request appear in our network request log. That's why we are seeing two requests.
+
+we are making use of useEffect, one of those dependencies, we have lists inside there results.length is changing, and so we're going to run that function a second time.
+
+![my-img](img/200719-4.png)
+
+we are going to solve this whole problem by introducing a second piece of state, and the second piece of state is going to keep track of the debouncedTerm. the debouncedTerm is essentially going to be our kind of time blagged search term.
+
+At our initial component render, we're going to set term & debouncedTerm equal to programming. We are then going to set up two separate useEffect functions. One is going to watch debouncedTerm. The other is going to watch term. And when I say watch, I mean that we are going to list term as the dependency to one useEffect and debouncedTerm as a dependency to the other useEffect.
+
+Inside the useEffect for debouncedTerm, that is where we are going to place our request logic. So inside of this useEffect, we are going to put some request data fetching stuff inside their.
+
+Whenever a user type something, we're going to run some code to immediately update our term piece of state. However, rather than having a timer setup to make our request, we are going to instead set up a timer to update the debouncedTerm piece of state instead. That's the big difference here. We are introducing a new piece of state that is only going to be updated after user stops typing for one second.
+
+![my-img](img/200719-5.png)
+
+If a user then type something again, just in the next instant, we're going to cancel that previous timer to update debouncedTerm. We're going to update our term piece of state and then set up another timer to update debouncedTerm.
+
+![my-img](img/200719-6.png)
+
+if a user then stops typing for 500 ms, we will execute the timer that we had set up to update that debouncedTerm piece of state. So we will update debouncedTerm, and then because we updated the debouncedTerm piece of states, we're going to cause re-render, and we're going to have that useEffect (we set up to watch the debouncedTerm piece of states) run, and we're going to fetch some data.
+
+We're now going to set up two separate useEffect. One useEffect is going to watch debouncedTerm, and whenever we have a change to debouncedTerm, we're going to make a request. We're going to have another useEffect that is going to watch updates to term, and whenever we have an update to term, we're going to create that timer to update debouncedTerm.
+
+```js
+useEffect(() => {
+  const timerId = setTimeout(() => {
+    setDebouncedTerm(term);
+  }, 1000);
+
+  return () => {
+    clearTimeout(timerId);
+  };
+}, [term]);
+```
+
+So now, anytime that we update term, we're going to setup a timer to update debouncedTerm. And if the user then immediately type something else, we're going to cancel the previous timer. We're going to make our update to term, and we're going to set up a new timer to update debouncedTerm.
+
+We are watching term, we set up the timer to update debouncedTerm. And if a user updates term again very quickly, we will cancel that time out that we just set and create a new timer.
+
+```js
+useEffect(() => {
+  const search = async () => {
+    const { data } = await axios.get("https://en.wikipedia.org/w/api.php", {
+      params: {
+        action: "query",
+        list: "search",
+        origin: "*",
+        format: "json",
+        srsearch: debouncedTerm
+      }
+    });
+    setResults(data.query.search);
+  };
+  search();
+}, [debouncedTerm]);
+```
+
+As a second argument, we only want to run first argument whenever the component is first rendered or debouncedTerm changes.
+
+The only reason we defined search as a separate function is because we cannot use async await syntax directly inside of a useEffect functions.
+
+We've got one use effect that is going to run anytime term changes, and term is going to change anytime user types into that input. Anytime this useEffect changes, we're going to queue up a change to debouncedTerm, that is going to execute in one second. If a user changes term again too quickly, we will clear the previous time out and set up another timer. Whenever a change to setDebouncedTerm actually goes through and is processed, we're going to run the second useEffect we had put together.
+
+Whenever the second useEffect runs, we are going to call search, that's going to make a request, we'll then take some results and update our results piece of state. The second useEffect is going to run whenever our component first shows up on the screen.
+
+useEffect always runs whenever we first render our component, so whenever we first render our component on screen, we're going to immediately execute a search.
+
+if we only type out these same word once again, React is going to see you've got the same word for debouncedTerm, so it's not going to rerun the useEffect function.

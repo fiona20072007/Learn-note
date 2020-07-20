@@ -1,4 +1,4 @@
-# 20200629 Redux Store Design
+# 20200630 Redux Store Design
 
 ![my-img](img/200629-2.png)
 
