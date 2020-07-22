@@ -71,4 +71,43 @@ The first way we could possibly do this would be to conditionally hide or show t
 
 Instead, the real way to close the dropdown is to apply a list of CSS classes or remove them.
 
-So to close our dropdown, what we really want to do is not hide or show renderedOptions. We really want to toggle the existence of these classes. A very simple way to accomplish this would be to add a new piece of state to our component. This new piece of state would keep track of whether or not the component is open at any given time. We can then toggle that piece of state from true to false whenever a user clicks on it. So true mean that we want to add in these classes and show the dropdown is open, and maybe a value of false mean don't show these classes and show it is closed.
+So to close our dropdown, what we really want to do is not hide or show renderedOptions. We want to toggle the existence of these classes. A very simple way to accomplish this would be to add a new piece of state to our component. This new piece of state would keep track of whether or not the component is open at any given time. We can then toggle that piece of state from true to false whenever a user clicks on it. So true mean that we want to add in these classes and show the dropdown is open, and maybe a value of false mean don't show these classes and show it is closed.
+
+```js
+const Dropdown = ({ options, selected, onSelectedChange }) => {
+  const [open, setOpen] = useState(false);
+
+  const renderedOptions = options.map(option => {
+    if (option.value === selected.value) {
+      return null;
+    }
+
+    return (
+      <div
+        key={option.value}
+        className="item"
+        onClick={() => onSelectedChange(option)}
+      >
+        {option.label}
+      </div>
+    );
+  });
+  return (
+    <div className="ui form">
+      <div className="field">
+        <label className="label">Select a Color</label>
+        <div
+          onClick={() => setOpen(!open)}
+          className={`ui selection dropdown ${open ? "visible active" : ""}`}
+        >
+          <i className="dropdown icon"></i>
+          <div className="text">{selected.label}</div>
+          <div className={`menu ${open ? "visible transition" : ""}`}>
+            {renderedOptions}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+```
