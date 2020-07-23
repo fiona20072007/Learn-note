@@ -51,3 +51,71 @@ So we would say that this event is kind of bubbling up or kind of rising up our 
 whenever we click on an element, the dropdown closes. It is because the user is clicking on this div right here. We run that on click. We update the currently selected item, the event then bubbles up, goes to the div with class of ui.selection, which does have an onClick function tied to it. That onClick right there is executed, and we update our open piece of state, which causes the dropdown to close.
 
 ![my-img](img/200722-5.png)
+
+So what we've released is that the dropdown component needs to detect a click event on any element inside of our document besides an element that it created. So if a user clicks anywhere outside the dropdown, the dropdown needs to detect that.
+
+We kind of established that the dropdown component has a tough time setting up event handlers on elements that it did not itself create. It is not impossible for a react component to setup event handlers on other elements, but it is just a little bit challenging.
+
+If we click on some element, that event is going to bubble up our DOM structure.
+
+![my-img](img/200722-6.png)
+
+So our solution is going to be to have our dropdown components setup a manual event listener, and we're going to set up that listener on the body element. Then anytime that someone clicks on any element inside of our entire document, that event is going to bubble up to the body element, and that will thus tell the dropdown that something has been clicked.
+
+we can make use of native browser events and event listeners as much as we please from our react code. So I wanted to set up a event listener on the body element without using react, we would write inside of our console.
+
+```js
+//in browser console
+document.body.addEventListener("click", () => console.log("click!"));
+```
+
+the first argument to this is going to be the type of event we want to listen for, which is a click, and then the second argument will be a function to run anytime that event occurs. Now, if I click on any element on the entire screen, the event is going to bubble up, eventually get to the body and we should see a console log of click.
+
+Without a doubt, we can setup a manual event listener, anytime we click anywhere, the event bubbles up.
+
+```js
+useEffect(() => {
+  document.body.addEventListener("click", () => {
+    console.log("CLICK!");
+  });
+}, []);
+```
+
+So we can setup a useEffect hook inside of dropdown, and inside there, whenever our component is first rendered onto the screen, we could set up an event listener to listen to that body element. And I want to make sure that this arrow function inside useEffect only runs one time when we first render our component onto the screen. I only want to run it one time because I only need to set up the event listener one time.
+
+```js
+useEffect(() => {
+  document.body.addEventListener("click", () => {
+    setOpen(false);
+  });
+}, []);
+```
+
+We can open up our dropdown and select an item, but the drop down stays open and it's only when we click outside of it now that the dropdown actually closes.
+
+![my-img](img/200722-8.png)
+
+So if we really think about event bubbling, you would probably guess that first event listener inside div.item gets invoked, and then inside div.ui.selection, and then inside body.
+
+![my-img](img/200722-7.png)
+
+Take a look at the order in which those event listeners actually get invoked.
+
+These purple boxes represent event handlers that have been wired up through react. And the green one is one that was wired up with a manual event listener. Whenever we think about the order in which event listeners are invoked, all the event listeners that were wired up using add event listener actually get called first. After all of those are called, and only then do all of our react event listeners get called. And it's always from the most child element up to the most parent.
+
+```js
+//body
+document.body.addEventListener("click", () => {
+  setOpen(false);
+});
+//item
+onClick={() => onSelectedChange(option)}
+//dropdown
+onClick={() => setOpen(!open)}
+```
+
+Now that the body event listener is always gonna be the first to be invoked. So inside there, the first thing that happens whenever we click on an item is we set open to false, which in theory closes our dropdown.
+
+Then the next thing that happens is the click on the individual item. So we update our currently selected option, that doesn't have anything to do with opening or closing the dropdown.
+
+And then finally, the last thing that actually gets invoked is the on Click listener to the dropdown itself. We take whatever the current value of open is and flip it to its opposite. Well, that means that we'd take that false value and we flip it back over to true, which results in the dropdown staying open. In theory, the dropdown does close for a fraction of the second, but then it immediately opens back up when this event listener gets invoked. So that is why the drop down appears to always be open whenever we click on an item.
