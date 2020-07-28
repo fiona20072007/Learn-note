@@ -8,7 +8,12 @@ to implement navigation instead of react up, we usually make use of a very popul
 
 ![my-img](img/200728-2.png)
 
-So the first thing we need to understand is how to determine what URL we are actually at. I'm gonna go back over to my browser and go to the address bar and manually edit URL to http://localhost:3000/translate
+So the first thing we need to understand is how to determine what URL we are actually at. I'm gonna go back over to my browser and go to the address bar and manually edit URL to
+
+```js
+http://localhost:3000/translate
+```
+
 Then once here, I'm going to open up my console, and I'm going to type out window.location.
 
 Window dot location is an object that is built into your browser. This object is going to be automatically updated anytime you navigate around to a different URL. Inside this object, you're going to see a lot of information that has been extracted from the current URL.
