@@ -19,4 +19,4 @@ So path name is everything inside the URL after the domain(localhost) and the po
 
 ![my-img](img/200728-4.png)
 
-We want to show the accordion whenever window location path name is equal to forward slash.
+We want to show the accordion whenever window location path name is equal to forward slash..
