@@ -1,18 +1,14 @@
 # 20200728 Navigation From Scratch
 
-So we say that we are going to navigate a user around or implement navigation. We are saying that we are going to show different components to the user based upon the current URL that they are visiting. Our root route or the home page, whenever user goes there, we will show the accordion.
-
 ![my-img](img/200728-1.png)
+
+So we say that we are going to navigate a user around or implement navigation. We are saying that we are going to show different components to the user based upon the current URL that they are visiting. Our root route or the home page, whenever user goes there, we will show the accordion.
 
 to implement navigation instead of react up, we usually make use of a very popular library called React Router.
 
 ![my-img](img/200728-2.png)
 
-So the first thing we need to understand is how to determine what URL we are actually at. I'm gonna go back over to my browser and go to the address bar and manually edit URL to
-
-```js
-localhost: 3000 / translate;
-```
+So the first thing we need to understand is how to determine what URL we are actually at. I'm gonna go back over to my browser and go to the address bar and manually edit URL to localhost: 3000 / translate;
 
 Then once here, I'm going to open up my console, and I'm going to type out window.location.
 
