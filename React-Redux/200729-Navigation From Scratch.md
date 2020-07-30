@@ -44,3 +44,33 @@ If I clicked on that list link and went over to this other page, here is ideally
 So in other words, whenever we click on some link inside of application in a react app, we just plain do not want to refresh the entire page. All we want to do is update the URL. And get all of our different routes to update as well. But we don't want to reload the index.HTML or all the associated CSS and JS.
 
 ![my-img](img/200729-3.png)
+
+this is a diagram of a couple of different components we've already created. Each of which are being displayed by a route component. Now, inside the header component, we are going to make a new kind of component called a link. A link is just going to display a link on the screen that's going to show a normal anchor element. But we are going to attach an onClick handler to that anchor element that is going to execute some logic whenever a user clicks on it.
+
+Whenever a user clicks on one of those links, we're going to build a navigation event. This is going to be an object that is going to communicate to the rest of our application that the URL has just changed. This navigation event will then be sent off to all of the different route components inside of our app. When they receive this navigation event, they're going to know that the URL has just changed. They'll then take a look at the updated URL and decide whether or not they should show their respective child components.
+
+We're going to make a new component called Link. We're going to build up an anchor element inside of it and attach an onClick handler. Whenever user clicks on that anchor element, we're going to emit navigation object and we're then going to listen for that in all of our different routes.
+
+So we want to show a link everywhere inside of our app instead of a normal anchor element. So now whenever we display a link, we are still going to provide an href prop, a class name and some text. We should make sure first that the link component receives those different props and applies them to the anchor element that's being displayed.
+
+```js
+const Link = ({ className, href, children }) => {
+  const onClick = event => {
+    event.preventDefault();
+  };
+
+  return (
+    <a onClick={onClick} className={className} href={href}>
+      {children}
+    </a>
+  );
+};
+```
+
+So instead, we need to make sure that we take these props to the link component and pass them through to the anchor element that is being displayed inside there. And then finally, the text inside would be this children prop. On that anchor element, I'm going to put in an onClick. Whenever a user clicks on this anchor, we're going to run a helper function called on Click. whenever we define an event handler, it's almost always going to receive an event object.
+
+The first thing we want to do whenever user clicks on an anchor element is make sure that we do not do a full page reload. So to prevent a full page reload inside this onClick handler, we will call event.preventDefault. That is going to prevent the normal behavior of the browser, which would cause a full page reload.
+
+now whenever I click on one of these links, you'll notice that nothing happens at all. there's no additional requests. No content changes or anything like that.
+
+So now the next thing we need to do is make sure that we change the URL. We have to change the URL without causing a full page refresh.
