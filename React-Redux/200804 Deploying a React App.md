@@ -63,7 +63,7 @@ git commit -m 'deploy'
 I'm going to commit all the changes that I've made to my projects so far.
 
 ```js
-git remote add origin git@github.com:fiona20072007/react-exercise.git
+git remote add origin git@github.com:fiona20072007/videos-hooks.git
 
 git remote -v
 
@@ -73,3 +73,12 @@ git push origin master
 After that I'll then link this repository with the repository they I just created on GitHub.
 
 now we've linked these two repositories, we're then going to push all of our code to GitHub.
+
+```js
+git status
+git add .
+git commit -m 'update'
+git push origin master
+```
+
+to deploy these changes. We're going to commit all these changes to our git repository and then push these changes up to GitHub. As soon as we push these changes up, Netlify is going to detect that we have edited our repository. It's then going to automatically rebuild our project.
