@@ -104,3 +104,72 @@ So let's imagine now that our server made a request to localhost 3000 slash page
 with a traditional server, if you make a request to some route that is not defined, the server is going to respond with a 404 not found.
 
 ![my-img](img/200812-9.png)
+
+Right now our application is being hosted by a react development server. This is a server that is running from our terminal. We launch it every time we start up a new project with NPM start. This is a server that is running on your computer, anytime you make a request to localhost 3000, you are accessing the react development server.
+
+```js
+const App = () => {
+  return (
+    <div>
+      <BrowserRouter>
+        <div>
+          <Route path="/" exact component={PageOne} />
+          <Route path="/pagetwo" component={PageTwo} />
+        </div>
+      </BrowserRouter>
+    </div>
+  );
+};
+```
+
+right now our application only has a definition of what to do for the slash page two route inside of our app.js file, like this App component right here. At this point we have written absolutely zero code that has been executed by any server whatsoever.
+
+In other words our react development server has no idea what the slash page two route means. It doesn't know what to do with it. And so if this was a traditional server and we made requests to page two and the traditional server didn't have that route defined it would definitely respond with a 404. but the react development server is a little bit different.
+
+So we make a request to localhost 3000 slash page 2. So that makes the request over to that server running on your machine. Then internally the create react app development server goes through a little process that says: do I have anything special for the route of slash page two, burst it checks to see if there are any development servers with that name like any development resources with the name of page 2.
+
+![my-img](img/200812-10.png)
+
+if you actually go back over to your application and open up your network request log and then refreshed the page you'll see a list of all these development resources. For example you see a bundle.js file. So if we make a request to localhost 3000 slash static slash js slash bundled.js, we get back a javascript file with all of our javascript code inside of it.
+
+so there are some routes defined on this server(create-react-app dev server) that are going to respond with some development resources like a CSS file or a javascript file. But if we do not have any development resource with that given pathname, then create react app dev server is going to move on to the next step.
+
+So the next step is it's going to check the public directory and see if there are any files with that given name, like the name page two. so if you recall inside of our project directory we have that public folder with a bunch of different files inside there so we can access all these files right here very easily by making a request to localhost 3000 slash, and then the file name.
+
+So there are some very special names that we can access on our development server or some very special routes. But in this case we have nothing defined for the route of page 2. unlike a traditional server, if you ask your development server for some resource some route that is not defined rather then returning a 404 error, the react app dev server is going to respond with your index.html file, and that is the total key to how all this browser router stuff works.
+
+if you ask for any route whatsoever, the react dev server is going to always respond with the index.html file as opposed to returning a 404 error.
+
+all of our route definitions are stuffed into the javascript or the client side of our application. Again the server does not know what to do with the path of slash page 2.
+
+![my-img](img/200812-11.png)
+
+So when a user goes over to our application and they click on this link right here to navigate over to page 2 and we refresh the page, we are making a request to our server for the route slash page two, and our react dev server, it decides to just automatically return the index.html file.
+
+And so what happens after that is the browser loads up all that html, it sees that there is a link inside of here for bundle.js file, that is the file that contains all of our applications code. So our application then loads up, react router loads up, the history object that is created by the browser router inspects the current url right here. It sees that we are at the route of slash page two, the history object tells the browser router that we are at slash page 2 and the browser router tells both the routes right here hey we were at slash page two, so render yourself appropriately.
+
+---
+
+the reason I say that this is the most complicated to set up is that this mechanism of always responding with the html file if the route is undefined is not typical. in any traditional server, if you're not making use of some like applications specifically set up for a single page application, the default behavior for every server in the world is that if you ask for some route that does not exist, you respond with a 404.
+
+If that was the case with our react development server, we would not be able to use the browser router, because as soon as we typed in a route up here of localhost slash page two, that is not a route that is handled by the development server, so we would get a 404 error that says sorry that route is not defined.
+
+So that's why it is so challenging to set up or deploy a application that makes use of the browser router. you have to make sure that your server is configured in this identical fashion(create-react-app dev server). You have to make sure that rather than responding with a 404 if you get some route that you don't know about, your server is going to instead respond with the index.html file.
+
+So when you try to deploy your own application you might end up seeing an error saying like hey I don't know what route slash page 2 is, and that's going to be thrown by your server. And the reason you're going to see that error is because you have not configured it appropriately to work with the browser router.
+
+---
+
+The reason that we use hash router is very similar to this entire system that we just described, this entire concept of making sure we return an index.html file. with the hash router, you're supposed to be setting up your backend server to not take a look at anything after the hash.
+
+![my-img](img/200812-12.png)
+
+when I navigate to localhost hash slash page2, take a look at the request that is made right here like you can inspect the local host request, and click on headers and if you look at this request right here you're going to see that there's basically nothing inside of here that makes any mention to the route slash page 2.
+
+So the reason that we use a hash router is that we can make requests to always localhost three thousand, and we can configure the route local those 3000 slash to always return our index.html file, and our server should not look at anything after the hash. The hash is only for use by the client or by the browser.
+
+And so you can say that if anyone ever makes requests to localhost 3000, you're always going to respond with the index.html file. and then when your application loads up, your application will then look at whatever is after the hash and then use that to determine what content to show on the screen.
+
+So essentially a hash router is a lot more flexible because it does not require special configuration by your backend server. You can just have a single html file at a single route. You can always make requests to exactly that route. And then when the application actually loads up, react router is going to look at only whatever is after the hash to decide what to show on the screen.
+
+a very good example of when to use a hash router is if you are doing a deployment to github pages. github pages does not allow you to do any type of special logic that says hey just go ahead and always return the index.html file. instead, github pages is always going to expect that you make a request to some defined resource. if you're deploying every application to github pages, you can say just come to my github pages link and then you can put whatever special path you have inside of the hash over here and the server is not going to care about whatever is after the hash.
