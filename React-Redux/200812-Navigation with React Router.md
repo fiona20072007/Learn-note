@@ -164,7 +164,7 @@ The reason that we use hash router is very similar to this entire system that we
 
 ![my-img](img/200812-12.png)
 
-when I navigate to localhost hash slash page2, take a look at the request that is made right here like you can inspect the local host request, and click on headers and if you look at this request right here you're going to see that there's basically nothing inside of here that makes any mention to the route slash page 2.
+when I navigate to localhost hash slash page2, take a look at the request that is made right here, like you can inspect the local host request, and click on headers, and if you look at this request right here you're going to see that there's basically nothing inside of here that makes any mention to the route slash page 2.
 
 So the reason that we use a hash router is that we can make requests to always localhost three thousand, and we can configure the route local those 3000 slash to always return our index.html file, and our server should not look at anything after the hash. The hash is only for use by the client or by the browser.
 
@@ -172,4 +172,6 @@ And so you can say that if anyone ever makes requests to localhost 3000, you're 
 
 So essentially a hash router is a lot more flexible because it does not require special configuration by your backend server. You can just have a single html file at a single route. You can always make requests to exactly that route. And then when the application actually loads up, react router is going to look at only whatever is after the hash to decide what to show on the screen.
 
-a very good example of when to use a hash router is if you are doing a deployment to github pages. github pages does not allow you to do any type of special logic that says hey just go ahead and always return the index.html file. instead, github pages is always going to expect that you make a request to some defined resource. if you're deploying every application to github pages, you can say just come to my github pages link and then you can put whatever special path you have inside of the hash over here and the server is not going to care about whatever is after the hash.
+a very good example of when to use a hash router is if you are doing a deployment to github pages. github pages does not allow you to do any type of special logic that says hey just go ahead and always return the index.html file. instead, github pages is always going to expect that you make a request to some defined resource. if you're deploying a react application to github pages, you can say just come to my github pages link and then you can put whatever special path you have inside of the hash over here, and the server is not going to care about whatever is after the hash.
+
+when you try to deploy a browser router, if you start to get error messages saying this route is not defined, chances are your server is not set up correctly.
