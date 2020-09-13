@@ -1,4 +1,4 @@
-# CSS layout
+# CSS Layout
 
 CSS reset method: normalize.css, help create cross-browser compatibility.
 
@@ -360,4 +360,33 @@ Fixed positioning is always relative to the browser's viewport. Like absolute po
 
 When you use relative, absolute or fixed positioning on elements, you may end up with several elements occupying the same space. This can make elements overlap or completely cover up other elements from view.
 
+```css
+body {
+  padding-top: 68px;
+}
+.main-header {
+  position: fixed;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  top: 0;
+}
+```
+
 ---
+
+Positioned elements follow a stacking order that determines which elements display above or below other elements.
+
+By default, the stacking order of positioned elements is the order they appear in the source code.
+
+Elements appearing later in the code sit on top on elements appearing earlier in the code.
+
+The z-index property is directly related to stacking order and it's what prevents elements from overlapping other elements.
+
+An element with a higher z-index value overlaps an element with a lower z-index value.
+
+Positioned elements have a z-index of 0 by default.
+
+z-index works only on elements with a position property set to absolute, fixed, or relative.
+
+If you set a z-index on an element with no position, it will do nothing.
