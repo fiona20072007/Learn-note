@@ -40,6 +40,14 @@ When you use a mobile-first layout approach, you define all the common layout st
 
 box-sizing: border-box; forces any padding and borders into the width and height of an element instead of expanding it.
 
+```css
+@media (min-width: 576px) and (max-width: 991px) {
+  nav {
+    float: left;
+  }
+}
+```
+
 ---
 
 If a page’s content is shorter than the height of the browser, the page may display a big, undesirable gap between the bottom of the viewport and the footer. In the markup, add a new \<div> that wraps the header and main container elements.
