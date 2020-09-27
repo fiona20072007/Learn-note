@@ -41,3 +41,5 @@ So after we load up that additional library, we can then register or initialize 
 ```js
 gapi.client.init({ clientId: "clientid" });
 ```
+
+we probably only want to initialize that library or kind of like load up the client portion of the library one time when this component is first rendered onto the screen. So with that in mind I'm going to define a componentDidMouth lifecycle method inside of the Google Oauth component.
